@@ -1,33 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Topbar from './components/Topbar.js';
-import { useState } from 'react';
-import Connect from './screens/connect.js';
-import MainScreen from './screens/main-screen.js';
-import Devices from './screens/devices.js';
-import Result from './screens/result.js';
-
-export const SCREEN_NAMES = {
-  MAIN: 'main',
-  DEVICES: 'devices',
-  CONNECT: 'connect',
-  TEMPERATURE: 'temperature'
-}
-
+import React, { useState } from 'react';
+import { StyleSheet, View, useColorScheme } from 'react-native';
+import Topbar from './components/Topbar';
+import { MqttProvider } from './context/MqttContext1';
+import Connect from './screens/connect';
+import MainScreen from './screens/main-screen';
+import Devices from './screens/devices';
+import Result from './screens/result';
+import { SCREEN_NAMES } from './components/ScreenNames';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState(SCREEN_NAMES.MAIN)
+  const [currentScreen, setCurrentScreen] = useState(SCREEN_NAMES.MAIN);
+  const [selectedSensors, setSelectedSensors] = useState([
+    { location: 'piwnica', type: 'temperature', selected: false },
+    { location: 'miasto', type: 'temperature', selected: false },
+    { location: 'piwnica', type: 'humidity', selected: false },
+    { location: 'miasto', type: 'humidity', selected: false },
+  ]);
+
+  const theme = useColorScheme();
+
+  const backgroundColor = theme === 'dark' ? 'black' : 'white';
+  const textColor = theme === 'dark' ? 'white' : 'black';
+
   return (
-    <View style={styles.container}>
-      <Topbar selectScreen={setCurrentScreen} currentScreen={currentScreen} />
-      {currentScreen == SCREEN_NAMES.MAIN && <MainScreen />}
-      {currentScreen == SCREEN_NAMES.DEVICES && <Devices />}
-      {currentScreen == SCREEN_NAMES.CONNECT && <Connect />}
-      {currentScreen == SCREEN_NAMES.TEMPERATURE && <Result />}
-
-
-    </View>
+    <MqttProvider>
+      <View style={[styles.container, { backgroundColor }]}>
+        <Topbar selectScreen={setCurrentScreen} currentScreen={currentScreen} textColor={textColor} />
+        {currentScreen === SCREEN_NAMES.MAIN && <MainScreen />}
+        {currentScreen === SCREEN_NAMES.DEVICES && <Devices setSelectedSensors={setSelectedSensors} selectedSensors={selectedSensors} />}
+        {currentScreen === SCREEN_NAMES.CONNECT && <Connect />}
+        {currentScreen === SCREEN_NAMES.TEMPERATURE && <Result selectedSensors={selectedSensors} />}
+      </View>
+    </MqttProvider>
   );
 }
 

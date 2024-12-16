@@ -9,10 +9,19 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~4.0.0",
+    "@react-native-community/checkbox": "^0.5.17",
+    "events": "^3.3.0",
     "expo": "~52.0.18",
     "expo-status-bar": "~2.0.0",
+    "mqtt": "^5.10.3",
     "react": "18.3.1",
-    "react-native": "0.76.5"
+    "react-dom": "18.3.1",
+    "react-native": "0.76.5",
+    "react-native-mqtt": "^0.1.0-beta4",
+    "react-native-web": "~0.19.13",
+    "readable-stream": "^4.5.2",
+    "url": "^0.11.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
